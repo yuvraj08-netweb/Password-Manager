@@ -1,26 +1,28 @@
-import ControlledAccordions from "./components/Accordian";
-import { useState } from "react";
-import DropdownFilter from "./components/DropDown";
-import "./index.css";
-import ViewSelect from "./components/Tabs";
+import { Routes, Route, Navigate } from "react-router-dom";
+import Register from "./pages/Register";
+import Login from "./pages/Login";
+import UserArea from "./pages/UserArea";
+import { ToastContainer } from "react-toastify";
+import PublicLayout from "./layouts/PublicLayout";
+import PrivateLayout from "./layouts/PrivateLayout";
+import AddData from "./pages/AddData";
 
 const App = () => {
-  const [selectedTab, setSelectedTab] = useState("Dropdown");
-
-  const handleViewChange = (tab) =>{
-    setSelectedTab(tab.text)
-  }
   return (
-    <div className="App">
-      <div className="max-w-[90%] mx-auto">
-        <h1 className="text-center text-2xl font-bold my-4 font-sour">
-          Password Manager
-        </h1>
-        <ViewSelect onTabClick={handleViewChange}/>
-      </div>
-
-      <div>{selectedTab === "Dropdown" ? <DropdownFilter /> : <ControlledAccordions />}</div>
-    </div>
+    <>
+      <ToastContainer position="bottom-right"  autoClose={3000} />
+      <Routes>
+        <Route path="/" element={<Navigate to="/register" />} />
+        <Route element={<PublicLayout />}>
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+        </Route>
+        <Route element={<PrivateLayout />}>
+          <Route path="/userArea" element={<UserArea />} />
+          <Route path="/add-new-data" element={<AddData />} />
+        </Route>
+      </Routes>
+    </>
   );
 };
 

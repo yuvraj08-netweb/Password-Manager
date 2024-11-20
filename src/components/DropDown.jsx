@@ -30,7 +30,7 @@ export default function DropdownFilter() {
   );
 
   return (
-    <Box sx={{ width: "95%", margin: "auto", padding: 4 }}>
+    <Box sx={{ width: "90%", margin: "auto" }}>
       {/* Dropdown */}
       <FormControl
         fullWidth
@@ -51,7 +51,7 @@ export default function DropdownFilter() {
           },
         }}
       >
-        <InputLabel id="project-select-label" className="dark:!text-white">
+        <InputLabel id="project-select-label" className="!top-[16px] !relative dark:!text-white">
           Select a Project
         </InputLabel>
         <Select
@@ -62,15 +62,23 @@ export default function DropdownFilter() {
           className="dark:!text-white"
           slotProps={{
             root: {
-              className: "custom-select-root dark:bg-gray-800", // Add custom classes here
+              className: "custom-select-root dark:bg-gray-800 ", // Add custom classes here
+            },
+          }}
+          MenuProps={{
+            PaperProps: {
+              sx: {
+                maxHeight: 150,
+                top: "243px !important"
+              },
             },
           }}
         >
-          <MenuItem value="">
+          <MenuItem className="!text-[0.875rem] !min-h-max" value="">
             <em>None</em>
           </MenuItem>
           {credentials.map((cred) => (
-            <MenuItem key={cred.id} value={cred.project}>
+            <MenuItem className="!text-[0.875rem] !min-h-max" key={cred.id} value={cred.project}>
               {cred.project}
             </MenuItem>
           ))}

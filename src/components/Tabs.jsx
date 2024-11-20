@@ -39,8 +39,8 @@ const initialData = [
         >
           <Typography
             className={`${className} ${
-              info.isActive ? "!text-white" : "!text-[--text-barber]"
-            }  Poppins500 text-[14px] leading-3`}
+              info.isActive ? "!text-white" : ""
+            }  Poppins500 !text-[13px] leading-3`}
           >
             {info.text}
           </Typography>

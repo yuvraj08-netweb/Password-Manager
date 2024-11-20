@@ -8,7 +8,7 @@ body {
   min-height: 400px;
   max-height: 600px;
   overflow-y: auto;
-  background-color: #FAFAFA;
+  background-color: #fafafa;
   font-family: "Geist", sans-serif !important;
   padding: 0 !important;
 }
@@ -41,4 +41,12 @@ body {
   -webkit-backdrop-filter: blur(4px);
   border-radius: 10px;
   border: 1px solid rgba(255, 255, 255, 0.18);
+}
+.errorPara {
+  color: red !important;
+  font-size: 13px !important;
+}
+
+.MuiSelect-select.MuiSelect-outlined {
+  padding: 10px 10px !important;
 }
