@@ -1,0 +1,44 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+  min-width: 460px;
+  min-height: 400px;
+  max-height: 600px;
+  overflow-y: auto;
+  background-color: #FAFAFA;
+  font-family: "Geist", sans-serif !important;
+  padding: 0 !important;
+}
+
+::-webkit-scrollbar {
+  width: 6px; /* Width of the vertical scrollbar */
+  height: 12px; /* Height of the horizontal scrollbar */
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Track color */
+  border-radius: 6px; /* Rounded corners */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888; /* Thumb color */
+  border-radius: 6px; /* Rounded corners */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555; /* Thumb color on hover */
+}
+.font-ubuntu {
+  font-family: "Ubuntu", sans-serif !important;
+}
+.glassCard {
+  background: rgba(255, 255, 255, 0.507) !important;
+  box-shadow: 0 8px 32px 0 rgba(31, 79, 135, 0.37);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
