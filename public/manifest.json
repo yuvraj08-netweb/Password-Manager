@@ -11,6 +11,6 @@
         "128": "/icons/logo128.jpg"
       }
     },
-    "permissions": ["storage"]
+    "permissions": ["storage","tabs"]
 }
   

@@ -4,7 +4,7 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { Divider, Link } from "@mui/material";
+import { Button, Divider } from "@mui/material";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
@@ -13,15 +13,20 @@ import { useSelector } from "react-redux";
 export default function ControlledAccordions() {
   const [expanded, setExpanded] = React.useState(false);
   const [showPassword, setShowPassword] = React.useState(false);
-  const { userDetails } = useSelector((state) => state.user);
+  const {userCredentials} = useSelector((state) => state.user);
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
+  const openInNewTab = (url) => {
+    // eslint-disable-next-line no-undef
+    chrome.tabs.create({ url });
+  };
+
 
   return (
     <div className="w-[90%] mx-auto flex flex-col gap-2 !mb-5 ">
       <div className="mt-5 max-h-[500px] overflow-y-auto">
-        {userDetails?.credentials?.map((project, idx) => {
+        {userCredentials?.credentials?.map((project, idx) => {
           return (
             <Accordion
               expanded={expanded === `panel-${idx}`}
@@ -35,7 +40,7 @@ export default function ControlledAccordions() {
                 id="panel1bh-header"
                 className="font-bold !bg-[#eeeeee] dark:!bg-gray-800"
               >
-                <Typography className="font-ubuntu">
+                <Typography className="font-ubuntu !text-[15px]">
                   {project.project}
                 </Typography>
               </AccordionSummary>
@@ -44,9 +49,9 @@ export default function ControlledAccordions() {
                   <div className="project-url flex justify-between">
                     <h4 className="max-w-max !text-[14px]">Project URL :</h4>
                     <span>
-                      <Link href={project.url} target="_blank">
+                      <Button onClick={()=>{openInNewTab(project.url)}} className="!text-[15px] !p-0 !normal-case !m-0 !text-black dark:!text-white">
                         {project.url}
-                      </Link>
+                      </Button>
                     </span>
                   </div>
                   <Divider />

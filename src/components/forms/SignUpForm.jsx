@@ -2,17 +2,18 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { Controller, useForm } from "react-hook-form";
 import { useState } from "react";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import { auth, db } from "../../firebase/config";
+import { useDispatch } from "react-redux";
+import { register } from "../../reducers/userSlice";
 
 const SignUpForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   // Toggle password visibility
   const togglePasswordVisibility = () => {
@@ -51,25 +52,21 @@ const SignUpForm = () => {
     },
   });
 
-  const navigate = useNavigate();
   const submitForm = async (data) => {
     setLoading(true);
     try {
-      await createUserWithEmailAndPassword(auth, data.emailId, data.password);
-      const user = auth.currentUser;
-
-      if (user) {
-        await setDoc(doc(db, "users", user.uid), {
-          id: user.uid,
-          email: user.email,
-          credentials: [],
-        });
-      }
-      setLoading(false);
-      navigate("/login");
+      dispatch(register(data))
+        .unwrap()
+        .then(() => {
+          setLoading(false);
+          navigate("/login");
+        })
+        .catch(()=>{
+          setLoading(false);
+        })
     } catch (error) {
-      console.log(error);
       setLoading(false);
+      console.log(error);
     }
     reset();
   };

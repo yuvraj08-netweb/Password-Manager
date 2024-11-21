@@ -1,5 +1,5 @@
 import ControlledAccordions from "./Accordian";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import DropdownFilter from "./DropDown";
 import "../index.css";
 import ViewSelect from "./Tabs";
@@ -7,33 +7,13 @@ import { IconButton, Tooltip } from "@mui/material";
 import LogoutIcon from "@mui/icons-material/Logout";
 import AddIcon from "@mui/icons-material/Add";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchUserData, logOutUser } from "../reducers/userSlice";
-import { doc, onSnapshot } from "firebase/firestore";
-import { db } from "../firebase/config";
+import { useDispatch } from "react-redux";
+import { logOutUser } from "../reducers/userSlice";
 
 const PasswordManager = () => {
   const [selectedTab, setSelectedTab] = useState("Dropdown");
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { userDetails } = useSelector((state) => state.user);
-
-  useEffect(() => {
-    if (!userDetails?.id) return;
-
-    const userDocRef = doc(db, "users", userDetails.id);
-
-    const unsubscribe = onSnapshot(userDocRef, (docSnapshot) => {
-      if (docSnapshot.exists()) {
-        const userData = docSnapshot.data();
-        dispatch(fetchUserData(userData));
-      } else {
-        console.error("No such document!");
-      }
-    });
-
-    return () => unsubscribe();
-  }, [userDetails?.id, dispatch]);
 
   const handleViewChange = (tab) => {
     setSelectedTab(tab.text);

@@ -4,15 +4,16 @@ import * as yup from "yup";
 import { Controller, useForm } from "react-hook-form";
 import { useState } from "react";
 import { Button, CircularProgress } from "@mui/material";
-import { db } from "../../firebase/config";
-import { arrayUnion, collection, doc, updateDoc } from "firebase/firestore";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { addProduct, getProducts,  } from "../../reducers/userSlice";
+import { useNavigate } from "react-router-dom";
 
 const AddDataForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const { userDetails } = useSelector((state) => state.user);
-
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const togglePasswordVisibility = () => {
     setShowPassword((prev) => !prev);
   };
@@ -42,21 +43,25 @@ const AddDataForm = () => {
 
   const submitForm = async (data) => {
     setLoading(true);
-
+    const dataObject = {
+      project: data.project,
+      url: data.url,
+      username: data.username,
+      password: data.password,
+    };
+    
     try {
-      const userRef = collection(db, "users");
-      const userDocRef = doc(userRef, userDetails.id);
-
-      await updateDoc(userDocRef, {
-        credentials: arrayUnion({
-          project: data.project,
-          url: data.url,
-          username: data.username,
-          password: data.password,
-        }),
-      });
-      reset();
-      setLoading(false);
+      dispatch(addProduct({userDetails, dataObject} ))
+        .unwrap()
+        .then(() => {
+          dispatch(getProducts(userDetails.id))
+            .unwrap()
+            .then(() => {
+              reset();
+              setLoading(false);
+              navigate("/userArea");
+            });
+        });
     } catch (error) {
       setLoading(false);
       console.error("Update Error:", error.message);

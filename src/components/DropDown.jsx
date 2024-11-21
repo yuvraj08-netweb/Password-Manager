@@ -5,9 +5,9 @@ import {
   FormControl,
   InputLabel,
   Typography,
-  Link,
   Box,
   Divider,
+  Button,
 } from "@mui/material";
 
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
@@ -17,13 +17,17 @@ import { useSelector } from "react-redux";
 
 export default function DropdownFilter() {
   const [selectedProject, setSelectedProject] = useState("");
-  const { userDetails } = useSelector((state) => state.user);
   const [showPassword, setShowPassword] = useState(false);
+  const { userCredentials } = useSelector((state) => state.user);
   const handleChange = (event) => {
     setSelectedProject(event.target.value);
   };
+  const openInNewTab = (url) => {
+    // eslint-disable-next-line no-undef
+    chrome.tabs.create({ url });
+  };
 
-  const filteredData = userDetails?.credentials?.find(
+  const filteredData = userCredentials?.credentials?.find(
     (cred) => cred.project === selectedProject
   );
 
@@ -76,7 +80,7 @@ export default function DropdownFilter() {
           <MenuItem className="!text-[0.875rem] !min-h-max" value="">
             <em>None</em>
           </MenuItem>
-          {userDetails?.credentials?.map((cred,idx) => (
+          {userCredentials?.credentials?.map((cred,idx) => (
             <MenuItem
               className="!text-[0.875rem] !min-h-max"
               key={idx}
@@ -93,43 +97,39 @@ export default function DropdownFilter() {
           sx={{
             marginTop: 4,
             padding: 3,
-            border: "1px solid #ccc",
             borderRadius: 3,
             backgroundColor: "#f9f9f9",
             display: "flex",
             flexDirection: "column",
             rowGap: "5px",
           }}
-          className="glassCard"
+          className="border border-solid border-[#ccc] dark:border-none dark:!bg-gray-800 mb-5"
         >
           <Typography
             variant="h6"
             gutterBottom
-            className="!text-black !font-bold"
+            className="!text-black dark:!text-white !font-bold !text-[16px]"
           >
             {filteredData.project}
           </Typography>
-          <Divider />
-          <Typography className="flex justify-between items-center !my-4 !text-sm ">
-            <h4 className="!text-black">Project URL : </h4>
-            <Link
-              href={filteredData.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              underline="hover"
-              className="dark:!text-black"
+          <Divider className="!bg-gray-500"/>
+          <Typography className="flex justify-between items-center !my-2 !text-sm ">
+            <h5 className="!text-black dark:!text-white">Project URL : </h5>
+            <Button
+              className="!text-black dark:!text-white !text-[15px] !p-0 !normal-case !m-0"
+              onClick={()=>{openInNewTab(filteredData.url)}}
             >
               {filteredData.url}
-            </Link>
+            </Button>
           </Typography>
-          <Divider />
-          <Typography className="flex justify-between items-center !my-3 !text-sm">
-            <h4 className="!text-black">Username : </h4>
+          <Divider className="!bg-gray-500"/>
+          <Typography className="flex justify-between items-center !my-1 !text-sm">
+            <h5 className="!text-black  dark:!text-white">Username : </h5>
             <div className="flex items-center gap-3">
               <input
                 type="text"
                 value={filteredData.username}
-                className="border border-blue-950 px-5 py-2 rounded-lg max-w-[165px] !text-black"
+                className="border border-blue-950 px-5 py-2 rounded-lg max-w-[165px] !text-black "
                 readOnly
               />
               <ContentCopyIcon
@@ -141,9 +141,9 @@ export default function DropdownFilter() {
               />
             </div>
           </Typography>
-          <Divider />
-          <Typography className="flex justify-between items-center !my-3 !text-sm">
-            <h4 className="!text-black">Password : </h4>
+          <Divider className="!bg-gray-500"/>
+          <Typography className="flex justify-between items-center !my-1 !text-sm">
+            <h5 className="!text-black  dark:!text-white">Password : </h5>
             <div className="flex items-center gap-3">
               <div className="relative">
                 <input
