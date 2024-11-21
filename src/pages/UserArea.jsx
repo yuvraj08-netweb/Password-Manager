@@ -1,11 +1,11 @@
-import PasswordManager from "../components/PasswordManager"
+import PasswordManager from "../components/PasswordManager";
 
 const UserArea = () => {
   return (
     <div>
-        <PasswordManager />
+      <PasswordManager />
     </div>
-  )
-}
+  );
+};
 
-export default UserArea
+export default UserArea;

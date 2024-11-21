@@ -1,18 +1,13 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import {
-  doc,
-  getDoc,
-} from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 import { getAuthUser } from "../utils";
 import { auth, db } from "../firebase/config";
-
 
 export const fetchUserData = createAsyncThunk(
   "user/fetchUserData",
   async (_, thunkAPI) => {
     try {
       const user = await getAuthUser();
-      console.log(user);
       const docSnap = await getDoc(doc(db, "users", user.uid));
       if (docSnap.exists()) {
         return docSnap.data();
@@ -31,14 +26,12 @@ export const logOutUser = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       auth.signOut();
-      console.log("user loggout successfull")
     } catch (error) {
       console.error("Log Out Failed");
       return thunkAPI.rejectWithValue(error.message);
     }
   }
 );
-
 
 const userSlice = createSlice({
   name: "user",
@@ -47,8 +40,7 @@ const userSlice = createSlice({
     isUser: false,
     userDetails: null,
   },
-  reducers: {
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchUserData.pending, (state) => {
@@ -66,11 +58,10 @@ const userSlice = createSlice({
       .addCase(logOutUser.fulfilled, (state) => {
         state.isUser = false;
         state.userDetails = null;
-        state.selectedChat = null;
       })
       .addCase(logOutUser.rejected, (action) => {
         console.error(action.payload);
-      })
+      });
   },
 });
 

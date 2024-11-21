@@ -8,50 +8,50 @@ import {
   Link,
   Box,
   Divider,
-
 } from "@mui/material";
 
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import credentials from "../data/credentials.json";
+import { useSelector } from "react-redux";
 
 export default function DropdownFilter() {
   const [selectedProject, setSelectedProject] = useState("");
-
+  const { userDetails } = useSelector((state) => state.user);
   const [showPassword, setShowPassword] = useState(false);
   const handleChange = (event) => {
     setSelectedProject(event.target.value);
   };
 
-  
-  const filteredData = credentials.find(
+  const filteredData = userDetails?.credentials?.find(
     (cred) => cred.project === selectedProject
   );
 
   return (
     <Box sx={{ width: "90%", margin: "auto" }}>
-      {/* Dropdown */}
       <FormControl
         fullWidth
         sx={{
           "& .MuiOutlinedInput-root": {
             "& fieldset": {
-              borderColor: "gray", // Default border color
+              borderColor: "gray",
             },
             "&:hover fieldset": {
-              borderColor: "gray", // Hover border color
+              borderColor: "gray",
             },
             "&.Mui-focused fieldset": {
-              borderColor: "gray", // Focused border color
+              borderColor: "gray",
             },
             "& .MuiSelect-icon": {
-              color: "gray", // Change dropdown icon color
+              color: "gray",
             },
           },
         }}
       >
-        <InputLabel id="project-select-label" className="!top-[16px] !relative dark:!text-white">
+        <InputLabel
+          id="project-select-label"
+          className="!top-[16px] !relative dark:!text-white"
+        >
           Select a Project
         </InputLabel>
         <Select
@@ -62,14 +62,13 @@ export default function DropdownFilter() {
           className="dark:!text-white"
           slotProps={{
             root: {
-              className: "custom-select-root dark:bg-gray-800 ", // Add custom classes here
+              className: "custom-select-root dark:bg-gray-800 ",
             },
           }}
           MenuProps={{
             PaperProps: {
               sx: {
                 maxHeight: 150,
-                top: "243px !important"
               },
             },
           }}
@@ -77,15 +76,18 @@ export default function DropdownFilter() {
           <MenuItem className="!text-[0.875rem] !min-h-max" value="">
             <em>None</em>
           </MenuItem>
-          {credentials.map((cred) => (
-            <MenuItem className="!text-[0.875rem] !min-h-max" key={cred.id} value={cred.project}>
+          {userDetails?.credentials?.map((cred,idx) => (
+            <MenuItem
+              className="!text-[0.875rem] !min-h-max"
+              key={idx}
+              value={cred.project}
+            >
               {cred.project}
             </MenuItem>
           ))}
         </Select>
       </FormControl>
 
-      {/* Display Selected Project Data */}
       {filteredData && (
         <Box
           sx={{
@@ -100,7 +102,11 @@ export default function DropdownFilter() {
           }}
           className="glassCard"
         >
-          <Typography variant="h6" gutterBottom className="!text-black !font-bold">
+          <Typography
+            variant="h6"
+            gutterBottom
+            className="!text-black !font-bold"
+          >
             {filteredData.project}
           </Typography>
           <Divider />

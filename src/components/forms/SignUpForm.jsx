@@ -4,11 +4,10 @@ import { Controller, useForm } from "react-hook-form";
 import { useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
-import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 import { auth, db } from "../../firebase/config";
 
 const SignUpForm = () => {
@@ -38,7 +37,6 @@ const SignUpForm = () => {
       .matches(/[0-9]/, "Must Include One Number"),
   });
 
-  
   const {
     control,
     handleSubmit,
@@ -55,8 +53,6 @@ const SignUpForm = () => {
 
   const navigate = useNavigate();
   const submitForm = async (data) => {
-    console.log(data);
-    
     setLoading(true);
     try {
       await createUserWithEmailAndPassword(auth, data.emailId, data.password);
@@ -66,30 +62,31 @@ const SignUpForm = () => {
         await setDoc(doc(db, "users", user.uid), {
           id: user.uid,
           email: user.email,
-          credentails: []
+          credentials: [],
         });
       }
-      toast.success("User Registered Successfully!");
       setLoading(false);
       navigate("/login");
     } catch (error) {
       console.log(error);
-      
-      toast.error(`Registration Failed Due To ${error.message}`);
       setLoading(false);
     }
     reset();
   };
 
   return (
-    <form className=""
-    onSubmit={handleSubmit(submitForm)}
->
+    <form className="" onSubmit={handleSubmit(submitForm)}>
       <div className="formElement my-4">
         <Controller
           name="emailId"
           control={control}
-          render={({ field }) => <input {...field} placeholder="Email Id" className="text-black border px-5 py-2 rounded-lg !w-full"/>}
+          render={({ field }) => (
+            <input
+              {...field}
+              placeholder="Email Id"
+              className="text-black border px-5 py-2 rounded-lg !w-full"
+            />
+          )}
         />
         <p className="errorPara">{errors.emailId?.message}</p>
       </div>
@@ -110,8 +107,12 @@ const SignUpForm = () => {
                 className="absolute top-2 right-3 text-[#fff] cursor-pointer"
                 onClick={togglePasswordVisibility}
               >
-               ${showPassword ? <VisibilityOffIcon
-               className="!text-gray-500"/> : <VisibilityIcon className="!text-gray-500"/>}
+                $
+                {showPassword ? (
+                  <VisibilityOffIcon className="!text-gray-500" />
+                ) : (
+                  <VisibilityIcon className="!text-gray-500" />
+                )}
               </span>
             </>
           )}
@@ -119,20 +120,22 @@ const SignUpForm = () => {
         <p className="errorPara">{errors.password?.message}</p>
       </div>
 
-      <p className="text-[#949393d7] text-xs mb-4 sm:hidden block">Already have a account ? <Link to="/login"><span className="font-bold"> Login Here </span></Link> </p>
+      <p className="text-[#949393d7] text-xs mt-2 mb-4 sm:hidden block">
+        Already have a account ?{" "}
+        <Link to="/login">
+          <span className="font-bold"> Login Here </span>
+        </Link>{" "}
+      </p>
 
       <div className="formElement max-w-[80px]">
-     
-      
-          <Button
-            className="!text-xs !normal-case"
-            type="submit"
-            variant="contained"
-            disabled={loading}
-          >
-            { loading ? "Loading..." :"Register"}
-          </Button>
-       
+        <Button
+          className="!text-xs !normal-case !bg-blue-600"
+          type="submit"
+          variant="contained"
+          disabled={loading}
+        >
+          {loading ? "Loading..." : "Register"}
+        </Button>
       </div>
     </form>
   );

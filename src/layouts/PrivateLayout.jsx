@@ -1,23 +1,33 @@
-import { useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Outlet } from "react-router-dom";
 import PageLoader from "../components/Common/PageLoader";
-
+import { fetchUserData } from "../reducers/userSlice";
 
 const PrivateLayout = () => {
-  const { loading, userDetails } = useSelector((state) => state.user);
-  
+  const { userDetails } = useSelector((state) => state.user);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    setLoading(true);
+    dispatch(fetchUserData())
+      .unwrap()
+      .then(() => {
+        setLoading(false);
+      });
+  }, [dispatch]);
 
   useEffect(() => {
     if (typeof loading === "object") {
       return;
     }
-    if (!loading && !userDetails) {
+    if (!loading && userDetails === null) {
       navigate("/login");
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [navigate, userDetails?.fullName]);
+    
+  }, [navigate, userDetails?.fullName,loading,userDetails]);
 
   if (loading) {
     return <PageLoader />;

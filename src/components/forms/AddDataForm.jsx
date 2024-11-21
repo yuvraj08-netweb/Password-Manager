@@ -1,15 +1,17 @@
-/* eslint-disable no-unused-vars */
 "use client";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { Controller, useForm } from "react-hook-form";
-import { toast } from "react-toastify";
 import { useState } from "react";
 import { Button, CircularProgress } from "@mui/material";
+import { db } from "../../firebase/config";
+import { arrayUnion, collection, doc, updateDoc } from "firebase/firestore";
+import { useSelector } from "react-redux";
 
 const AddDataForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const { userDetails } = useSelector((state) => state.user);
 
   const togglePasswordVisibility = () => {
     setShowPassword((prev) => !prev);
@@ -40,13 +42,24 @@ const AddDataForm = () => {
 
   const submitForm = async (data) => {
     setLoading(true);
+
     try {
-      console.log(data);
+      const userRef = collection(db, "users");
+      const userDocRef = doc(userRef, userDetails.id);
+
+      await updateDoc(userDocRef, {
+        credentials: arrayUnion({
+          project: data.project,
+          url: data.url,
+          username: data.username,
+          password: data.password,
+        }),
+      });
+      reset();
       setLoading(false);
     } catch (error) {
-      toast.error(`Invalid Email Adress or Password! `);
       setLoading(false);
-      console.error(error, "ERROR");
+      console.error("Update Error:", error.message);
     }
   };
 
@@ -59,7 +72,13 @@ const AddDataForm = () => {
         <Controller
           name="project"
           control={control}
-          render={({ field }) => <input {...field} placeholder="project name"  className="border px-6 py-1 rounded-lg !w-full"/>}
+          render={({ field }) => (
+            <input
+              {...field}
+              placeholder="project name"
+              className="border px-6 py-1 rounded-lg !w-full !text-gray-800"
+            />
+          )}
         />
         <p className="errorPara">{errors.project?.message}</p>
       </div>
@@ -67,7 +86,13 @@ const AddDataForm = () => {
         <Controller
           name="url"
           control={control}
-          render={({ field }) => <input {...field} placeholder="project url"  className="border px-6 py-1 rounded-lg !w-full"/>}
+          render={({ field }) => (
+            <input
+              {...field}
+              placeholder="project url"
+              className="border px-6 py-1 rounded-lg !w-full !text-gray-800"
+            />
+          )}
         />
         <p className="errorPara">{errors.url?.message}</p>
       </div>
@@ -75,7 +100,13 @@ const AddDataForm = () => {
         <Controller
           name="username"
           control={control}
-          render={({ field }) => <input {...field} placeholder="username"  className="border px-6 py-1 rounded-lg !w-full"/>}
+          render={({ field }) => (
+            <input
+              {...field}
+              placeholder="username"
+              className="border px-6 py-1 rounded-lg !w-full !text-gray-800"
+            />
+          )}
         />
         <p className="errorPara">{errors.username?.message}</p>
       </div>
@@ -89,7 +120,8 @@ const AddDataForm = () => {
                 {...field}
                 placeholder="password"
                 type={showPassword ? "text" : "password"}
-                id="password" className="border px-6 py-1 rounded-lg !w-full"
+                id="password"
+                className="border px-6 py-1 rounded-lg !w-full !text-gray-800"
               />
               <span
                 className="absolute top-1 right-3 text-[#fff] cursor-pointer"
@@ -141,8 +173,7 @@ const AddDataForm = () => {
           variant="contained"
           type="submit"
           disabled={loading}
-          color="info"
-          className="!w-full !normal-case"
+          className="!w-full !normal-case !bg-blue-600"
         >
           {loading ? <CircularProgress color="#fff" size={"20px"} /> : "Add"}
         </Button>

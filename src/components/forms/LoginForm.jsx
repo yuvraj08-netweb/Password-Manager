@@ -95,10 +95,10 @@ const LoginForm = () => {
                 className="text-black !w-full border rounded-lg px-5 py-2"
               />
               <span
-                className="absolute top-3 right-5 text-[#fff] cursor-pointer"
+                className="absolute top-2 right-3 text-[#fff] cursor-pointer"
                 onClick={togglePasswordVisibility}
               >
-              {showPassword ? <VisibilityOffIcon/> : <VisibilityIcon/>}
+              {showPassword ? <VisibilityOffIcon className="!text-gray-500"/> : <VisibilityIcon className="!text-gray-500"/>}
               </span>
             </>
           )}
@@ -106,13 +106,13 @@ const LoginForm = () => {
         <p className="errorPara">{errors.password?.message}</p>
       </div>
 
-      <p className="text-[#949393d7] text-xs mb-4 sm:hidden block">Don`t have a account ? <Link to="/register"><span className="font-bold"> Register Here </span></Link> </p>
+      <p className="text-[#949393d7] text-xs mb-4 mt-2 sm:hidden block">Don`t have a account ? <Link to="/register"><span className="font-bold"> Register Here </span></Link> </p>
 
       <div className="formElement max-w-[80px]">
      
       
           <Button
-            className="!text-xs !normal-case"
+            className="!text-xs !normal-case !bg-blue-600"
             type="submit"
             variant="contained"
             disabled={loading}
