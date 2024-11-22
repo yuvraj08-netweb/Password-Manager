@@ -1,20 +1,21 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate, Outlet } from "react-router-dom";
 import PageLoader from "../components/Common/PageLoader";
 
 const PublicLayout = () => {
-  const { loading, userDetails } = useSelector((state) => state.user);
+  const { userDetails } = useSelector((state) => state.user);
+  const [loading,setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (typeof loading === "object") {
-      return;
-    }
-    if (userDetails) {
+
+    if (userDetails !== null) {
+      setLoading(false);
       navigate("/userArea");
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    setLoading(false);
+
   }, [navigate, userDetails]);
 
   if (loading) {
