@@ -7,7 +7,6 @@ import {
   setDoc,
   updateDoc,
 } from "firebase/firestore";
-// import { getAuthUser } from "../utils";
 import { auth, db } from "../firebase/config";
 import {
   createUserWithEmailAndPassword,

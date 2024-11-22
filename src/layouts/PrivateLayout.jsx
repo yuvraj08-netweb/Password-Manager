@@ -8,8 +8,6 @@ const PrivateLayout = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-
-
   useEffect(() => {
     if (userDetails === null) {
       navigate("/login");
